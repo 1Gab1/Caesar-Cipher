@@ -1,0 +1,88 @@
+/*
+Topic: Caesar Cipher Program
+This program can take in data and encypt or decrypt it. It can also be used to shift characters.
+Let's take my name as an example. 
+So if i need to cipher the word Sanskar using Caesar Cipher,
+I can shift the key by 1 (key shift = 1):
+Tbotlbs which is Sanskar shifted by 1.
+*/
+
+// Using it in a program
+#include <stdio.h>
+#include <string.h> // for strlen()
+#include <stdlib.h>
+
+void caesar_cipher(char* plainText, int key);
+void caesar_decipher(char* cipherText, int key);
+
+int main(void) {
+    int key = 1;
+    char plainText[100];
+    
+  // Asking the user to enter the plain text
+    printf("Enter the text you want to encrypt: ");
+   
+  // Taking the users input
+    fgets(plainText, sizeof(plainText), stdin);
+  
+  //Printing the ciphered text
+    printf("Ciphered text: ");
+    caesar_cipher(plainText, key);
+    system("pause"); //Since we're using windows
+  
+  return 0;
+}
+
+void caesar_cipher(char* plainText, int key) {
+    int i = 0;
+    int cipherValue;
+    char cipher;
+
+    //Using loop on the plaintext
+    while (plainText[i] != '\0'&& strlen(plainText) - 1 > i) {
+        // For uppercase letters
+        if (plainText[i] >= 'A' && plainText[i] <= 'Z') {
+            cipherValue = (((int)plainText[i] - 'A' + key) % 26) + 'A';
+            cipher = (char)(cipherValue);
+        }
+        // For lowercase letters
+        else if (plainText[i] >= 'a' && plainText[i] <= 'z') {
+            cipherValue = (((int)plainText[i] - 'a' + key) % 26) + 'a';
+            cipher = (char)(cipherValue);
+        }
+        // Finally adding the cypher value and printing the text.
+        printf("%c", cipher);
+        i++;
+    }
+    printf("\n");
+}
+
+//We have now Ciphered the plaintext for both uppercase and lowercase letters. Now moving on to deciphering the text.
+
+void caesar_decipher(char* cipherText, int key) {
+    int i = 0;
+    int decipherValue;
+    char decipher;
+
+    // We used key to cipher the text. So we need to decipher the text by using the negative of the key.
+    key = -key;
+
+    // Similarly looping like we did on the cipher process.
+    while (cipherText[i] != '\0' && strlen(cipherText) - 1 > i) {
+        // For uppercase letters.
+        if (cipherText[i] >= 'A' && cipherText[i] <= 'Z') {
+            decipherValue = (((int)cipherText[i] - 'A' + key + 26) % 26) + 'A';
+            decipher = (char)(decipherValue);
+        }
+        // For lowercase letters.
+        else if (cipherText[i] >= 'a' && cipherText[i] <= 'z') {
+            decipherValue = (((int)cipherText[i] - 'a' + key + 26) % 26) + 'a';
+            decipher = (char)(decipherValue);
+        }
+
+        // Finally adding the decipher value and printing the text.
+        printf("%c", decipher);
+        i++;
+    }
+    printf("\n");
+}
