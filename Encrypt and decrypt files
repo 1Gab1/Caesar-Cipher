@@ -1,0 +1,74 @@
+// Above was the code to cipher and decipher texts. Now we can use it to encrypt and decrypt files as well.
+
+// Encrypting a file
+void caesar_cipher(FILE* input_file, FILE* output_file, int key);
+void caesar_decipher(FILE* input_file, FILE* output_file, int key);
+
+int main() {
+    FILE *input_file, *output_file;
+    char input_filename[255], output_filename[255];
+    int key, choice;
+  // Asking the user to enter the input file name
+    printf("Enter input filename: ");
+    scanf("%s", input_filename);
+  // Asking the user to enter the output file name
+    printf("Enter output filename: ");
+    scanf("%s", output_filename);
+  // Asking the user to enter the key
+    printf("Enter the key for encryption/decryption: ");
+    scanf("%d", &key);
+  // ASking the user to choose between encryption and decryption
+    printf("Choose an operation:\n");
+    printf("1. Encrypt\n");
+    printf("2. Decrypt\n");
+    scanf("%d", &choice);
+// Using the choice to decide which function to use.
+    input_file = fopen(input_filename, "r");
+    output_file = fopen(output_filename, "w");
+
+    if (input_file == NULL || output_file == NULL) {
+        printf("Error opening files.\n");
+        return 1;
+    }
+// If the user want to encrypt the file
+    if (choice == 1) {
+        caesar_cipher(input_file, output_file, key);
+        printf("Your file has been encrypted successfully.\n");
+      
+    } else if (choice == 2) {
+        caesar_decipher(input_file, output_file, key);
+        printf("Your file has been decrypted successfully.\n");
+    } else {
+        printf("Invalid choice.\n");
+    }
+
+    fclose(input_file);
+    fclose(output_file);
+
+    return 0;
+}
+
+void caesar_cipher(FILE* input_file, FILE* output_file, int key) {
+    char ch;
+    while ((ch = fgetc(input_file)) != EOF) {
+        if (ch >= 'A' && ch <= 'Z') {
+            ch = ((ch - 'A' + key) % 26) + 'A';
+        } else if (ch >= 'a' && ch <= 'z') {
+            ch = ((ch - 'a' + key) % 26) + 'a';
+        }
+        fputc(ch, output_file);
+    }
+}
+
+void caesar_decipher(FILE* input_file, FILE* output_file, int key) {
+    key = -key; // In decryption, we use the negative of the key
+    char ch;
+    while ((ch = fgetc(input_file)) != EOF) {
+        if (ch >= 'A' && ch <= 'Z') {
+            ch = ((ch - 'A' + key + 26) % 26) + 'A';
+        } else if (ch >= 'a' && ch <= 'z') {
+            ch = ((ch - 'a' + key + 26) % 26) + 'a';
+        }
+        fputc(ch, output_file);
+    }
+}
